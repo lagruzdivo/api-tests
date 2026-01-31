@@ -1,14 +1,16 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, EmailStr
+
 
 class Post(BaseModel):
-    userId: int
-    id: int
-    title: str
-    body: str
+    userId: int = Field(gt=0)
+    id: int = Field(gt=0)
+    title: str = Field(min_length=1)
+    body: str = Field(min_length=1)
+
 
 class Comment(BaseModel):
-    postId: int
-    id: int
-    name: str
-    email: str
-    body: str
+    postId: int = Field(gt=0)
+    id: int = Field(gt=0)
+    name: str = Field(min_length=1)
+    email: EmailStr
+    body: str = Field(min_length=1)

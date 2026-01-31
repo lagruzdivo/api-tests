@@ -1,5 +1,6 @@
 import requests
 import pytest
+from pydantic import TypeAdapter
 from models import Post, Comment
 
 class TestPosts:
@@ -51,13 +52,7 @@ class TestPosts:
         assert response.status_code == 200
         comments_data = response.json()
 
-        assert isinstance(comments_data, list)
-        assert len(comments_data) > 0
+        comments = TypeAdapter(list[Comment]).validate_python(comments_data)
 
-        for comment_data in comments_data:
-            comment = Comment(**comment_data)
-
-            assert comment.name != ''
-            assert comment.email != ''
-            assert comment.body != ''
+        for comment in comments:
             assert comment.postId == post_id
